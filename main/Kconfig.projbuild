@@ -163,8 +163,7 @@ endif
 
 choice WAKE_WORD_TYPE
     prompt "Wake Word Implementation Type"
-    default USE_AFE_WAKE_WORD if (IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4) && SPIRAM
-    default USE_CUSTOM_WAKE_WORD
+    default USE_CUSTOM_WAKE_WORD if (IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4) && SPIRAM
     help
         Choose the type of wake word implementation to use
 
