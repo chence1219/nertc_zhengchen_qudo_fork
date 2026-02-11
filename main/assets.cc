@@ -3,6 +3,10 @@
 #include "display.h"
 #include "application.h"
 #include "lvgl_theme.h"
+#include <esp_afe_sr_models.h>
+#include <esp_nsn_models.h>
+#include <esp_mn_iface.h>
+#include <esp_mn_models.h>
 #ifdef HAVE_LVGL
 #include "display/lcd_display.h"
 #endif
@@ -140,6 +144,10 @@ bool Assets::Apply() {
             models_list_ = srmodel_load(static_cast<uint8_t*>(ptr));
             if (models_list_ != nullptr) {
                 auto& app = Application::GetInstance();
+                if((esp_srmodel_filter(models_list_, ESP_MN_PREFIX, NULL) == nullptr)){
+                    esp_srmodel_deinit(models_list_);
+                    models_list_ = esp_srmodel_init("model");
+                }
                 app.GetAudioService().SetModelsList(models_list_);
             } else {
                 ESP_LOGE(TAG, "Failed to load srmodels.bin");
