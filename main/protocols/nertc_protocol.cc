@@ -348,6 +348,14 @@ bool NeRtcProtocol::OpenAudioChannel(const std::string& wake_word) {
         return false;
     }
 
+    nertc_sdk_audio_encoded_frame_t encoded_frame;
+    unsigned char buffer[4] = {0x00, 0x00, 0x00, 0x00};
+    encoded_frame.data = buffer;
+    encoded_frame.length = sizeof(buffer);
+    nertc_sdk_audio_config audio_config = {server_sample_rate_, 1, samples_per_channel_};
+    nertc_push_audio_encoded_frame(engine_, NERTC_SDK_MEDIA_MAIN_AUDIO, audio_config, 100, &encoded_frame);
+
+
     nertc_sdk_start_ai_config_t config;
     nertc_sdk_start_ai_config_init(&config);
     if (!wake_word.empty()) {
